@@ -1,0 +1,3 @@
+#!/bin/sh
+# Reguły bazy wiedzy: walidacja + ochrona pól zarządzanych przez narzędzia.
+exec "$(git rev-parse --show-toplevel)/kb" hook-commit-msg "$1"

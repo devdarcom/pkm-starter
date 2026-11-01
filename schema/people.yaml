@@ -1,0 +1,22 @@
+# Rejestr osób i mandatów. Służy do:
+#  - mapowania mówców z transkrypcji (name + aliases, bez rozróżniania wielkości liter),
+#  - deterministycznego wyliczenia mandate_ok dla decyzji: osoba ma mandat, jeśli
+#    każdy obszar decyzji jest na liście `decides` (lub `decides: ["*"]`),
+#    a dla scope=org dodatkowo `org_mandate: true`.
+# Brak mandatu => rekomendacja "śledź" w changesecie.
+#
+# Uzupełnij siebie (slug i aliasy, tak jak podpisują Cię transkrypcje) oraz osoby, które często mówią w Twoich źródłach.
+people:
+  ja:                          # ZMIEŃ slug na własny i ustaw ten sam w kb.yaml (`me`)
+    name: Imię Nazwisko
+    aliases: []
+    roles: [właściciel bazy wiedzy]
+    decides: ["*"]
+    org_mandate: true
+  claude:
+    name: Claude
+    aliases: [Claude, ChatGPT, asystent, agent]
+    roles: [asystent AI]
+    agent: true                # wynik rozmowy z modelem jest ustaleniem człowieka (`me` z kb.yaml):
+    decides: []                # dowody zachowują dosłownego mówcę, ale decided_by i mandat to `me`
+    org_mandate: false

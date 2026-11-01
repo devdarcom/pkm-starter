@@ -1,0 +1,26 @@
+# Odstępstwa od ścieżki standardowej.
+#
+# Możesz odejść od dowolnego elementu z rama.yaml (także od kontraktu), ale świadomie i na własną odpowiedzialność.
+# Zatwierdzasz to sam: wystarczy wpis z czterema NIEPUSTYMI polami. Nikt Cię o zgodę nie pyta.
+# Test ramy (python3 -m unittest discover -s tests -t .) wymaga wpisu tylko wtedy, gdy element jest zmieniony
+# albo go brakuje. Wyjaśnienie elementów: DLACZEGO.md.
+#
+# Pola wpisu:
+#   element        id z rama.yaml (np. hook-commit-msg)
+#   powod          dlaczego odchodzisz od ścieżki standardowej
+#   skutek         co tracisz albo co przejmujesz na siebie (np. "testy odbiorcze zadania 3 nie pasują,
+#                  piszę własne"; "bez hooka sam pilnuję pól zarządzanych")
+#   jak_sprawdzam  czym potwierdzasz, że mimo odstępstwa wszystko działa (własny test, komenda, opis)
+#
+# Uwaga: ścieżka standardowa mieści się w czasie zadania, a odstępstwo zwykle nie. Plan B zawsze masz:
+# tag spotkanie-N w repozytorium wzorcowym.
+#
+# Przykład (odkomentuj i dopasuj):
+#
+# odstepstwa:
+#   - element: hook-commit-msg
+#     powod: "Pracuję na Windowsie bez sh; hook jako skrypt .sh nie uruchomi się"
+#     skutek: "Reguł ochrony pól nie wymusza git, sprawdzam je ręcznie przed commitem"
+#     jak_sprawdzam: "tests/test_moj_hook.py woła ./kb hook-commit-msg na przykładowym commicie"
+
+odstepstwa: []

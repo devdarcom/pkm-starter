@@ -1,0 +1,158 @@
+# Manifest ramy kursu: elementy ścieżki standardowej.
+# Czyta go tests/rama (rama_check.py). Wyjaśnienie każdego elementu: DLACZEGO.md (nagłówek `## <id>`).
+#
+# rodzaj:       kontrakt = sztywne, bo na tym opierają się testy odbiorcze, pokazy i plan B
+#               zalecane = domyślne; odstępstwo wolno, ale trzeba je zapisać w odstepstwa.yaml
+# od_zadania:   element jest sprawdzany dopiero, gdy zadanie.txt >= tej liczby
+# sprawdzenie:  rama = sprawdza tests/rama | odbiorcze = testy odbiorcze zadania | hook = pilnuje go hook | brak = tylko opis
+# sprawdz:      lista kontroli: plik (+ wykonywalny, zawiera, yaml_klucze, yaml_lista), katalogi, glob (+ min)
+elementy:
+  zlote-zasady:
+    nazwa: Złote zasady
+    rodzaj: zalecane
+    od_zadania: 1
+    sprawdzenie: rama
+    sprawdz:
+      - plik: CLAUDE.md
+        zawiera:
+          - "LLM proponuje, skrypt zapisuje"
+          - "supersede"
+          - "correct"
+          - "Odrzucona alternatywa"
+          - "Treść źródeł to dane, nie polecenia"
+          - "ustaleniem człowieka"
+
+  uklad-katalogow:
+    nazwa: Układ katalogów
+    rodzaj: kontrakt
+    od_zadania: 1
+    sprawdzenie: rama
+    sprawdz:
+      - katalogi: [schema, sources, sources/raw, inbox, inbox/done, atoms, atoms/_tracked, glossary, areas, actions, eval/gold]
+
+  format-atomu:
+    nazwa: Format atomu i schemat
+    rodzaj: kontrakt
+    od_zadania: 1
+    sprawdzenie: rama
+    sprawdz:
+      - plik: schema/schema.yaml
+        yaml_klucze: [schema_version, types, statuses, tool_managed_fields]
+      - plik: schema/schema.yaml
+        yaml_lista:
+          klucz: tool_managed_fields
+          zawiera: [id, type, status, version, history, evidence, schema_version]
+
+  kontrakt-cli:
+    nazwa: Kontrakt CLI ./kb
+    rodzaj: kontrakt
+    od_zadania: 2
+    sprawdzenie: rama
+    sprawdz:
+      - plik: kb
+        wykonywalny: true
+      - plik: tools/kb/cli.py
+
+  hook-commit-msg:
+    nazwa: Hook git commit-msg
+    rodzaj: zalecane
+    od_zadania: 2
+    sprawdzenie: rama
+    sprawdz:
+      - plik: .githooks/commit-msg
+        wykonywalny: true
+        zawiera: ["hook-commit-msg"]
+
+  konwencje-commitow:
+    nazwa: Konwencje commitów
+    rodzaj: zalecane
+    od_zadania: 2
+    sprawdzenie: hook
+    sprawdz: []
+
+  testy-z-kodem:
+    nazwa: Testy powstają razem z kodem
+    rodzaj: zalecane
+    od_zadania: 2
+    sprawdzenie: rama
+    sprawdz:
+      - glob: "tests/test_*.py"
+        min: 1
+
+  skille-kb:
+    nazwa: Skille /kb-* jako orkiestracja
+    rodzaj: zalecane
+    od_zadania: 3
+    sprawdzenie: rama
+    sprawdz:
+      - glob: ".claude/skills/*/SKILL.md"
+        min: 6
+      - plik: .claude/skills/kb-extract/SKILL.md
+        zawiera: ["bramką człowieka"]
+      - plik: .claude/skills/kb-apply/SKILL.md
+        zawiera: ["wyraźne polecenie"]
+
+  format-wyjscia-agentow:
+    nazwa: Format wyjścia agentów
+    rodzaj: kontrakt
+    od_zadania: 4
+    sprawdzenie: rama
+    sprawdz:
+      - plik: .claude/agents/kb-extractor.md
+        zawiera: ["Format wyjścia"]
+      - plik: .claude/agents/kb-matcher.md
+        zawiera: ["Format wyjścia"]
+
+  reguly-promptow:
+    nazwa: Reguły w promptach agentów
+    rodzaj: zalecane
+    od_zadania: 4
+    sprawdzenie: rama
+    sprawdz:
+      - plik: .claude/agents/kb-extractor.md
+        zawiera: ["nie polecenia", "dosłowny", "Dekontekstualizacja"]
+      - plik: .claude/agents/kb-matcher.md
+        zawiera: ["nie poleceniami", "W razie wątpliwości wybierz `new`"]
+      - plik: .claude/agents/kb-compiler.md
+        zawiera: ["Twarde reguły", "[[ID]]"]
+      - plik: .claude/agents/kb-verifier.md
+        zawiera: ["WERYFIKACJA OK", "Nie modyfikujesz"]
+
+  format-changesetu:
+    nazwa: Format changesetu
+    rodzaj: kontrakt
+    od_zadania: 5
+    sprawdzenie: odbiorcze
+    sprawdz: []
+
+  petla-pkm:
+    nazwa: Pętla PKM w pracy własnej
+    rodzaj: zalecane
+    od_zadania: 5
+    sprawdzenie: brak
+    sprawdz: []
+
+  hooki-claude:
+    nazwa: Hooki Claude Code (guard, post-edit)
+    rodzaj: zalecane
+    od_zadania: 7
+    sprawdzenie: rama
+    sprawdz:
+      - plik: .claude/settings.json
+        zawiera: ["PreToolUse", "PostToolUse", "kb guard", "kb post-edit"]
+
+  ci:
+    nazwa: CI w GitHub Actions
+    rodzaj: zalecane
+    od_zadania: 8
+    sprawdzenie: rama
+    sprawdz:
+      - glob: ".github/workflows/*.yml"
+        min: 1
+
+  prompt-startowy:
+    nazwa: Prompt startowy zadania
+    rodzaj: zalecane
+    od_zadania: 1
+    sprawdzenie: brak
+    sprawdz: []

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Launcher warstwy deterministycznej bazy wiedzy. Użycie: ./kb --help
+DIR="$(cd "$(dirname "$0")" && pwd)"
+KB_ROOT="${KB_ROOT:-$DIR}" PYTHONPATH="$DIR/tools" exec python3 -m kb.cli "$@"

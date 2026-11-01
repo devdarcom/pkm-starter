@@ -1,0 +1,12 @@
+# Zamknięta lista obszarów. To Twoja domena: dopisz obszary głównie ręcznie w zadaniu 1.
+# Ekstraktor proponuje podobszary (<obszar>/<proces>) w changesecie, a apply dopisuje je tutaj
+# dopiero po Twoim zatwierdzeniu propozycji. Hierarchia przez "/": atom w "journey/aktywacja"
+# należy też do strony "journey".
+areas:
+  ogolne:
+    title: Ogólne
+    owner: null          # slug osoby z people.yaml (routing przeglądu poza zakresem kursu)
+  # Przykłady, odkomentuj i dopasuj do swojej pracy:
+  # produkt:           {title: Produkt, owner: null}
+  # klienci:           {title: Klienci, owner: null}
+  # organizacja:       {title: Organizacja i role, owner: null}

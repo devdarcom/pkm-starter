@@ -1,0 +1,3 @@
+# Ustawienia tej instalacji bazy wiedzy.
+me: ja                     # kim jestem (slug z schema/people.yaml): mówca w /kb-capture i autor ustaleń z rozmów z modelem
+collect_folder: null       # domyślny folder dla /kb-collect, np. ~/Nagrania/dyktafon

@@ -1,0 +1,109 @@
+# Schemat bazy wiedzy. Zmiana tego pliku = zmiana kontraktu.
+# Przy zmianie niekompatybilnej: dopisz migrację w tools/kb/migrations/ (instrukcja w tamtejszym __init__.py),
+# podbij schema_version i uruchom ./kb migrate. Test w tests/test_migrate.py pilnuje kompletności łańcucha.
+schema_version: 1
+
+# Typy atomów (MVP). sections.required = nagłówki "## …" wymagane w treści atomu.
+types:
+  decision:
+    prefix: DEC
+    dir: atoms/decisions
+    label: Decyzja
+    sections:
+      required: [Decyzja]
+      optional: [Kontekst, Konsekwencje]   # Kontekst: gdy jest co dopisać; bez niego atom i tak ma tytuł, cytat i wskaźnik do źródła
+  rule:
+    prefix: RULE
+    dir: atoms/rules
+    label: Reguła / wymaganie
+    sections:
+      required: [Reguła]            # treść w Gherkinie (Zakładając / Gdy / Wtedy)
+      optional: [Uzasadnienie]
+  question:
+    prefix: Q
+    dir: atoms/questions
+    label: Pytanie otwarte
+    sections:
+      required: [Pytanie]
+      optional: [Co blokuje]
+  fact:
+    prefix: FACT
+    dir: atoms/facts
+    label: Fakt organizacyjny
+    review_days: 180                # domyślny review_by = data zatwierdzenia (apply/confirm) + 180 dni
+    sections:
+      required: [Fakt]
+      optional: []
+  term:
+    prefix: TERM
+    dir: glossary                   # plik = slug pojęcia (do linkowania [[slug]]), id = TERM-NNNN
+    label: Pojęcie (słownik)
+    sections:
+      required: [Definicja]
+      optional: [Uwagi]
+
+# Obiekty "śledź" (sygnały, które nie zostały jeszcze wiedzą). Indeksowane, przeszukiwane przez matcher.
+# signal (strength, sources, speakers, first_seen, last_seen) liczy narzędzie z evidence przy każdym dowodzie.
+# promote_at: od ilu dowodów lint i `./kb signals` oznaczają sygnał jako gotowy do awansu.
+tracked:
+  prefix: TRK
+  dir: atoms/_tracked
+  promote_at: 2
+
+# Atom odrzuconej alternatywy decyzji: typ decision, status rejected_alternative.
+rejected_alternative_sections: [Wariant, Powód odrzucenia]
+
+statuses:
+  integrated: obowiązuje
+  tracked: sygnał śledzony, nie jest jeszcze wiedzą
+  under_review: wymaga ponownego przeglądu (propagacja – poza MVP)
+  superseded: zastąpiony nowszym atomem (świat się zmienił)
+  deprecated: wycofany bez następcy
+  rejected_alternative: rozważana i odrzucona alternatywa decyzji (wiedza o tym, czego NIE wybrano)
+  corrected: atom był błędny względem źródła (model się mylił); następca w corrected_by lub brak
+
+# Statusy, które istnieją tylko w changesecie (nigdy w pliku atomu): candidate, rejected.
+
+relations:
+  supersedes:   {inverse: superseded_by, propagates: true}
+  alternatives: {inverse: alternative_of, propagates: false}
+  corrects:     {inverse: corrected_by, propagates: true}
+  relates_to:   {inverse: null, propagates: false}
+
+scopes: [team, org]
+
+facets:
+  level: [strategic, tactical, operational]
+  confidence: [high, medium, low]
+  certainty: [fact, hypothesis]
+
+# Pola zarządzane wyłącznie przez narzędzia (./kb). Ręczna zmiana = błąd w hooku commit-msg.
+tool_managed_fields:
+  - id
+  - type
+  - status
+  - version
+  - history
+  - evidence
+  - signal
+  - supersedes
+  - superseded_by
+  - supersede_reason
+  - contradicts
+  - depends_on
+  - refines
+  - alternatives
+  - alternative_of
+  - corrects
+  - corrected_by
+  - correction_reason
+  - deprecate_reason
+  - valid_from
+  - valid_to
+  - decided_by
+  - mandate_ok
+  - schema_version
+
+# Pola, które wolno zmieniać ręcznie (z commitem kb(edit): …):
+#   areas, facets, terms, relates_to, aliases, scope, confidence, review_by, owner, due, treść (body)
+# Zmiana znaczenia treści → ./kb bump <ID> "opis" (podbija version, commituje).
